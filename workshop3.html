@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<body onload = "init()">
+
+	<p>Click to get your coordinates</p>
+
+	<button onclick="getLocation()">Click here</button>
+
+	<p id="demo"></p>
+
+	<script>
+	var x = document.getElementById("demo");
+	function getLocation() {
+	  if (navigator.geolocation) 
+	  {
+	    navigator.geolocation.watchPosition(showPosition, showError);
+	  } else { 
+	    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+	}
+	function trackLocation()
+	{
+		navigator.geolocation.watchPosition(showTrackedPosition);
+	}
+	function showPosition(position) {
+	  x.innerHTML = "Latitude: " + position.coords.latitude + 
+	  "<br>Longitude: " + position.coords.longitude;
+	}
+	function showTrackedPosition(position) {
+	  x.innerHTML = "Tracked Latitude: " + position.coords.latitude + 
+	  "<br> Tracked Longitude: " + position.coords.longitude;
+	}
+	trackLocation();
+	
+	function init()
+	{
+		var dataContainerOrientation = document.getElementById('dataContainerOrientation');
+      	var dataContainerMotion = document.getElementById('dataContainerMotion');
+	if(window.DeviceOrientationEvent) 
+	{
+		
+		window.addEventListener('deviceorientation', function(event)
+		{
+			var alpha = event.alpha;
+			var beta = event.beta;
+			var gamma = event.gamma;
+		if(alpha!=null || beta!=null || gamma!=null) 
+		{
+    		dataContainerOrientation.innerHTML = 'Orientation:<br/> '+ 'alpha: ' + alpha + '<br/>beta: ' + beta + '<br />gamma: ' + gamma;
+  		}
+		}, false);
+	}
+	if(window.DeviceMotionEvent) 
+		{
+      		window.addEventListener('devicemotion', function(event) 
+      		{
+                var x = event.accelerationIncludingGravity.x;
+                var y = event.accelerationIncludingGravity.y;
+                var z = event.accelerationIncludingGravity.z;
+                var r = event.rotationRate;
+                var html = 'Acceleration:<br />';
+                html += 'x: ' + x +'<br />y: ' + y + '<br/>z: ' + z+ '<br />';
+                html += 'Rotation rate:<br />';
+                if(r!=null) html += 'alpha: ' + r.alpha +'<br />beta: ' + r.beta + '<br/>gamma: ' + r.gamma + '<br />';
+                dataContainerMotion.innerHTML = html;
+              });
+      } 
+}
+	</script>
+
+
+	<div id="dataContainerOrientation">
+		No - device orientation data
+	</div>
+	<div id="dataContainerMotion">
+		No - device motion data
+	</div>
+</body>
+</html>
